@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { courseApi } from '@/api/courseApi';
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { courseApi } from "@/api/courseApi";
 
 export function useCourses() {
   const [page, setPage] = useState(0);
@@ -8,8 +8,9 @@ export function useCourses() {
   const [level, setLevel] = useState<string | undefined>(undefined);
 
   const query = useQuery({
-    queryKey: ['user-courses', page, pageSize, level],
-    queryFn: () => courseApi.getAll({ page, size: pageSize, level }).then((r) => r.data),
+    queryKey: ["user-courses", page, pageSize, level],
+    queryFn: () =>
+      courseApi.getAll({ page, size: pageSize, level }).then((r) => r.data),
   });
 
   return {
