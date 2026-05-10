@@ -9,6 +9,9 @@ export const courseApi = {
   getAll: (params?: PaginationParams & { level?: string }) =>
     axiosInstance.get<PaginatedResponse<Course>>(`${BASE}/courses`, { params }),
 
+  getEnrolled: (params?: PaginationParams & { title?: string; level?: string }) =>
+    axiosInstance.get<PaginatedResponse<Course>>(`${BASE}/courses/enroll`, { params }),
+
   enrollCourse: (body: EnrollCourseRequest) =>
     axiosInstance.post(`${BASE}/user-courses`, body),
 };
