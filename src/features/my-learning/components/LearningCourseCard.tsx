@@ -1,24 +1,37 @@
-import { Card, Progress, Tag, Typography, Button, Space } from 'antd';
+import { Card, Progress, Tag, Typography, Button, Space } from "antd";
 import {
   PlayCircleOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
-} from '@ant-design/icons';
-import type { EnrolledCourse } from '@/types/course.types';
-import { formatDate } from '@/utils/helpers';
+} from "@ant-design/icons";
+import type { EnrolledCourse } from "@/types/course.types";
+import { formatDate } from "@/utils/helpers";
+import { useNavigate } from "react-router";
 
 const { Text, Paragraph } = Typography;
 
 const levelColor: Record<string, string> = {
-  BEGINNER: 'green',
-  INTERMEDIATE: 'blue',
-  ADVANCED: 'red',
+  BEGINNER: "green",
+  INTERMEDIATE: "blue",
+  ADVANCED: "red",
 };
 
 const statusConfig = {
-  NOT_STARTED: { color: 'default', label: 'Not Started', icon: <ClockCircleOutlined /> },
-  IN_PROGRESS: { color: 'processing', label: 'In Progress', icon: <PlayCircleOutlined /> },
-  COMPLETED: { color: 'success', label: 'Completed', icon: <CheckCircleOutlined /> },
+  NOT_STARTED: {
+    color: "default",
+    label: "Not Started",
+    icon: <ClockCircleOutlined />,
+  },
+  IN_PROGRESS: {
+    color: "processing",
+    label: "In Progress",
+    icon: <PlayCircleOutlined />,
+  },
+  COMPLETED: {
+    color: "success",
+    label: "Completed",
+    icon: <CheckCircleOutlined />,
+  },
 };
 
 interface LearningCourseCardProps {
@@ -27,51 +40,60 @@ interface LearningCourseCardProps {
 
 export function LearningCourseCard({ enrollment }: LearningCourseCardProps) {
   const { course, progress, status, enrolledAt, lastAccessedAt } = enrollment;
+  const navigate = useNavigate();
   const cfg = statusConfig[status];
-
+  const navigationUrl = () => {
+    navigate(`/my-learning/${course.id}`);
+  };
   return (
     <Card
       hoverable
-      style={{ height: '100%' }}
-      styles={{ body: { display: 'flex', flexDirection: 'column', height: '100%' } }}
+      style={{ height: "100%" }}
+      styles={{
+        body: { display: "flex", flexDirection: "column", height: "100%" },
+      }}
       cover={
         <div
           style={{
             height: 120,
             background:
-              status === 'COMPLETED'
-                ? 'linear-gradient(135deg, #52c41a 0%, #389e0d 100%)'
-                : status === 'IN_PROGRESS'
-                ? 'linear-gradient(135deg, #a435f0 0%, #7928ca 100%)'
-                : 'linear-gradient(135deg, #8c8c8c 0%, #595959 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
+              status === "COMPLETED"
+                ? "linear-gradient(135deg, #52c41a 0%, #389e0d 100%)"
+                : status === "IN_PROGRESS"
+                  ? "linear-gradient(135deg, #a435f0 0%, #7928ca 100%)"
+                  : "linear-gradient(135deg, #8c8c8c 0%, #595959 100%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
           }}
         >
-          <PlayCircleOutlined style={{ fontSize: 44, color: 'rgba(255,255,255,0.85)' }} />
-          {status === 'COMPLETED' && (
+          <PlayCircleOutlined
+            style={{ fontSize: 44, color: "rgba(255,255,255,0.85)" }}
+          />
+          {status === "COMPLETED" && (
             <div
               style={{
-                position: 'absolute',
+                position: "absolute",
                 top: 8,
                 right: 8,
-                background: 'rgba(255,255,255,0.2)',
-                borderRadius: '50%',
+                background: "rgba(255,255,255,0.2)",
+                borderRadius: "50%",
                 padding: 4,
               }}
             >
-              <CheckCircleOutlined style={{ color: '#fff', fontSize: 20 }} />
+              <CheckCircleOutlined style={{ color: "#fff", fontSize: 20 }} />
             </div>
           )}
         </div>
       }
     >
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <Space style={{ marginBottom: 8 }}>
           <Tag color={levelColor[course.level]}>{course.level}</Tag>
-          <Tag color={cfg.color} icon={cfg.icon}>{cfg.label}</Tag>
+          <Tag color={cfg.color} icon={cfg.icon}>
+            {cfg.label}
+          </Tag>
         </Space>
 
         <Text strong style={{ fontSize: 14, marginBottom: 4, lineHeight: 1.4 }}>
@@ -80,41 +102,64 @@ export function LearningCourseCard({ enrollment }: LearningCourseCardProps) {
 
         <Paragraph
           type="secondary"
-          style={{ fontSize: 12, margin: '4px 0 12px', flex: 1 }}
+          style={{ fontSize: 12, margin: "4px 0 12px", flex: 1 }}
           ellipsis={{ rows: 2 }}
         >
-          {course.description || 'No description available.'}
+          {course.description || "No description available."}
         </Paragraph>
 
         <div style={{ marginBottom: 12 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-            <Text type="secondary" style={{ fontSize: 12 }}>Progress</Text>
-            <Text strong style={{ fontSize: 12, color: '#a435f0' }}>{progress}%</Text>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 4,
+            }}
+          >
+            <Text type="secondary" style={{ fontSize: 12 }}>
+              Progress
+            </Text>
+            <Text strong style={{ fontSize: 12, color: "#a435f0" }}>
+              {progress}%
+            </Text>
           </div>
           <Progress
             percent={progress}
-            strokeColor={status === 'COMPLETED' ? '#52c41a' : '#a435f0'}
+            strokeColor={status === "COMPLETED" ? "#52c41a" : "#a435f0"}
             showInfo={false}
             size="small"
           />
         </div>
 
-        <div style={{ fontSize: 11, color: '#8c8c8c', marginBottom: 12 }}>
+        <div style={{ fontSize: 11, color: "#8c8c8c", marginBottom: 12 }}>
           <div>Enrolled: {formatDate(enrolledAt)}</div>
-          {lastAccessedAt && <div>Last accessed: {formatDate(lastAccessedAt)}</div>}
+          {lastAccessedAt && (
+            <div>Last accessed: {formatDate(lastAccessedAt)}</div>
+          )}
         </div>
 
         <Button
-          type={status === 'COMPLETED' ? 'default' : 'primary'}
+          type={status === "COMPLETED" ? "default" : "primary"}
           block
-          icon={status === 'COMPLETED' ? <CheckCircleOutlined /> : <PlayCircleOutlined />}
+          onClick={navigationUrl}
+          icon={
+            status === "COMPLETED" ? (
+              <CheckCircleOutlined />
+            ) : (
+              <PlayCircleOutlined />
+            )
+          }
           style={
-            status !== 'COMPLETED'
-              ? { backgroundColor: '#a435f0', borderColor: '#a435f0' }
+            status !== "COMPLETED"
+              ? { backgroundColor: "#a435f0", borderColor: "#a435f0" }
               : {}
           }
         >
-          {status === 'COMPLETED' ? 'Review Course' : status === 'IN_PROGRESS' ? 'Continue Learning' : 'Start Learning'}
+          {status === "COMPLETED"
+            ? "Review Course"
+            : status === "IN_PROGRESS"
+              ? "Continue Learning"
+              : "Start Learning"}
         </Button>
       </div>
     </Card>

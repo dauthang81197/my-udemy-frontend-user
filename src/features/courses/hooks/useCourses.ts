@@ -25,3 +25,12 @@ export function useCourses() {
     },
   };
 }
+
+export function useCourseDetail(id: string | null) {
+  return useQuery({
+    queryKey: ["course-detail", id],
+    queryFn: () => courseApi.getDetailCourse(id!).then((r) => r.data),
+    enabled: !!id,
+    select: (res) => res.data,
+  });
+}
