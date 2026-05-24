@@ -79,7 +79,7 @@ export function DetailMyLearningPage() {
               {isCourseDetailLoading && (
                 <p className="text-gray-500 px-4 py-3">Loading...</p>
               )}
-              {courseDetail?.sections?.map((section, sectionIndex) => {
+              {courseDetail?.sections?.map((section, _sectionIndex) => {
                 const isOpen = openSections.has(section.id);
                 const completedCount = section.lessons.filter(
                   (l) => l.progress?.isCompleted,
