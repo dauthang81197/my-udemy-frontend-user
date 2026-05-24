@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 
 export function useErrollCourse() {
-  const qc = useQueryClient();
+  useQueryClient();
   return useMutation({
     mutationFn: courseApi.enrollCourse,
     onSuccess: () => {

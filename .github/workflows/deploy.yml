@@ -41,8 +41,8 @@ jobs:
             ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.sha }}
           build-args: |
             VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
-            VITE_AUTH_SERVICE_PREFIX=${{ vars.VITE_AUTH_SERVICE_PREFIX }}
-            VITE_COURSE_SERVICE_PREFIX=${{ vars.VITE_COURSE_SERVICE_PREFIX }}
+            VITE_AUTH_SERVICE_PREFIX=${{ secrets.VITE_AUTH_SERVICE_PREFIX }}
+            VITE_COURSE_SERVICE_PREFIX=${{ secrets.VITE_COURSE_SERVICE_PREFIX }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -62,7 +62,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           source: docker-stack.yml
-          target: /opt/my-udemy/
+          target: /opt/my-udemy/user/
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
@@ -75,7 +75,7 @@ jobs:
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             export FRONTEND_USER_IMAGE=$IMAGE_NAME:${{ needs.build-and-push.outputs.image-tag }}
             docker stack deploy \
-              -c /opt/my-udemy/docker-stack.yml \
-              my-udemy \
+              -c /opt/my-udemy/user/docker-stack.yml \
+              my-udemy-user \
               --with-registry-auth
             docker image prune -f
