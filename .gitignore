@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 .env
+
+# BMad & Claude local tooling (not for version control)
+_bmad/
+.claude/
